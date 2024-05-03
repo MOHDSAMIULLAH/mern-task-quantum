@@ -12,7 +12,7 @@ function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/login', { email, password });
+      const response = await axios.post('https://mern-task-quantum.onrender.com/login', { email, password });
       localStorage.setItem('token',JSON.stringify(response.data));
       // Redirect to protected page
       window.location.href = '/protected';

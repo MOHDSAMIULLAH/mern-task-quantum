@@ -15,7 +15,7 @@ function RegistrationForm() {
     e.preventDefault();
     console.log({ name, email, password, dob },"{ name, email, password, dob }")
     try {
-        const response = await axios.post('http://localhost:5000/register', { name, email, password, dob });
+        const response = await axios.post('https://mern-task-quantum.onrender.com/register', { name, email, password, dob });
       localStorage.setItem('token',JSON.stringify(response.data));
       // Redirect to login page
       window.location.href = '/protected';
