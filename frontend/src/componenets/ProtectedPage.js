@@ -1,12 +1,19 @@
 // ProtectedPage.js
 import React, { useEffect, useState } from 'react';
-import { Table } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
 import dayjs from 'dayjs'
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import ToastBoot from './Toast';
+
 function ProtectedPage() {
     const [users, setUsers] = useState([]);
+    const [show, setShow] = useState(false);
+  const [msg, setMsg] = useState("");
+  const [bg, setBg] = useState("info");
   // Retrieve user information from localStorage
 
+  
   const data = JSON.parse(localStorage.getItem('token'));
   console.log(data,"user data")
   // If user is not logged in, redirect to login page
@@ -28,9 +35,25 @@ function ProtectedPage() {
     fetchUsers();
   }, []);
 
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    try {
+      localStorage.removeItem('token');
+      
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   return (
-    <div>
+    <div className='px-4'>
+      <ToastBoot show={show} setShow={setShow} msg={msg} bg={bg} className="h-25" />
+      <div className='d-flex py-5 justify-content-around'>
       <h1 className='text-center'>Welcome, {data?.user?.name}!</h1>
+      <Button variant="primary" onClick={handleLogout} className="btn-lg " >Logout</Button>
+      </div>
+
       <h2>Here are all users:</h2>
       <Table striped bordered hover>
         <thead>

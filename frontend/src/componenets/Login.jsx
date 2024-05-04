@@ -2,24 +2,33 @@ import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import ToastBoot from './Toast';
 
 function Login() {
     const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [show, setShow] = useState(false);
+  const [msg, setMsg] = useState("");
+  const [bg, setBg] = useState("info");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('https://mern-task-quantum.onrender.com/login', { email, password });
       localStorage.setItem('token',JSON.stringify(response.data));
-      // Redirect to protected page
+      
       window.location.href = '/protected';
+      // Redirect to protected page
     } catch (error) {
       console.error('Login failed:', error);
+      setMsg(error.message)
+      setBg("danger")
+      setShow(true)
     }
   };
   return (
-    <section className="vh-100" style={{ backgroundColor: "#008080" }}> 
+    <section className="" style={{ backgroundColor: "#008080" }}> 
+    <ToastBoot show={show} setShow={setShow} msg={msg} bg={bg} className="h-25" />
       <Container className="py-5 h-100" >
         <Row className="d-flex justify-content-center align-items-center h-100">
           <Col xs={12} md={8} lg={6} xl={5}>

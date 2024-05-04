@@ -4,12 +4,16 @@ import React, { useState } from 'react';
 import { Form, Button,Col,Row, Container } from 'react-bootstrap';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import ToastBoot from './Toast';
 
 function RegistrationForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [dob, setDob] = useState('');
+  const [show, setShow] = useState(false);
+  const [msg, setMsg] = useState("");
+  const [bg, setBg] = useState("info");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,13 +23,20 @@ function RegistrationForm() {
       localStorage.setItem('token',JSON.stringify(response.data));
       // Redirect to login page
       window.location.href = '/protected';
+      setMsg("successfully registered")
+      setBg("success")
+      setShow(true)
     } catch (error) {
       console.error('Registration failed:', error);
+      setMsg(error.message)
+      setBg("danger")
+      setShow(true)
     }
   };
 
   return (
-    <section className="vh-100" style={{ backgroundColor: "#008080" }}> 
+    <section className="" style={{ backgroundColor: "#008080" }}> 
+    <ToastBoot show={show} setShow={setShow} msg={msg} bg={bg} />
       <Container className="py-5 h-100" >
       <Row className="d-flex justify-content-center align-items-center h-100">
       <Col xs={12} md={8} lg={6} xl={5}>
@@ -38,22 +49,22 @@ function RegistrationForm() {
     <Form onSubmit={handleSubmit}>
       <Form.Group controlId="formBasicName" className='mb-2'>
         <Form.Label className='text-light'>Name</Form.Label>
-        <Form.Control type="text" placeholder="Enter name" value={name} onChange={(e) => setName(e.target.value)} />
+        <Form.Control type="text" placeholder="Enter name" value={name} onChange={(e) => setName(e.target.value)} required/>
       </Form.Group>
 
       <Form.Group controlId="formBasicDOB" className='mb-2'>
         <Form.Label className='text-light'>Date of Birth</Form.Label>
-        <Form.Control type="date" value={dob} onChange={(e) => setDob(e.target.value)} />
+        <Form.Control type="date" value={dob} onChange={(e) => setDob(e.target.value)} required/>
       </Form.Group>
 
       <Form.Group controlId="formBasicEmail" className='mb-2'>
         <Form.Label className='text-light'>Email address</Form.Label>
-        <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
       </Form.Group>
 
       <Form.Group controlId="formBasicPassword" className='mb-2'>
         <Form.Label className='text-light'>Password</Form.Label>
-        <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
       </Form.Group>
 
       <Button variant="primary" type="submit" className='mt-4 w-100 '>
